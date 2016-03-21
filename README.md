@@ -1,3 +1,3 @@
 # snippets
 
-contains various snippets for a a full stack developer
+contains various snippets for a full stack developer
