@@ -1,0 +1,24 @@
+#send sms 
+
+
+
+     
+private function sendsms($number,$code) {
+        $hash = "A6d0d548b3f4de9a0664141d306d2175e"; 
+	$test = "0"; 
+	$sender = "TCDEMO"; 
+        $message = "Smartkada activation code : $code";
+        $numbers = "91$number";   
+	$message = urlencode($message);
+	$data = "workingkey=".$hash."&message=".$message."&sender=".$sender."&to=".$numbers."&test=".$test;
+	$ch = curl_init('http://tx.techsoltech.com/api/web2multisms.php?');
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$result = curl_exec($ch); // This is the result from the API
+	curl_close($ch); 
+        echo $result; 
+    }
+    
+
+
