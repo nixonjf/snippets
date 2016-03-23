@@ -1,0 +1,12 @@
+ 
+
+
+
+#apache
+sudo fuser -k -n tcp 80
+
+#mysql
+ps -e|grep -i 'mysqld'
+
+ 
+
