@@ -1,0 +1,14 @@
+#.htaccess for localhost
+RewriteEngine On
+RewriteBase /rowalue/
+RewriteCond %{THE_REQUEST} /web/([^\s?]*) [NC]
+RewriteRule ^ %1 [L,NE,R=302]
+RewriteRule ^((?!web/).*)$ web/$1 [L,NC]
+ 
+
+#.htaccess for zf
+RewriteCond %{SERVER_PORT} ^80$
+RewriteRule !\.(htm|js|css|ico|gif|jpg|png|JPG|jpeg|pdf|PDF|GIF|swf|xml|txt|pl|vcf|xls)$ index.php
+
+
+
