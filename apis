@@ -3,21 +3,28 @@
 
 
      
-private function sendsms($number,$code) {
-        $hash = "A6d0d548b3f4de9a0664141d306d2175e"; 
-	$test = "0"; 
-	$sender = "TCDEMO"; 
+ private function sendsms($number,$code) {
+        $username = "asishpulickan@gmail.com";
+	$hash = "3bcd1e6293823b6e53ff1f1c9c109f7057f165f6";
+	// Config variables. Consult http://api.textlocal.in/docs for more info.
+	$test = "0";
+	// Data for text message. This is the text message data.
+	$sender = "TXTLCL"; // This is who the message appears to be from.
         $message = "Smartkada activation code : $code";
-        $numbers = "91$number";   
+	 
+	$numbers = "91$number"; // A single number or a comma-seperated list of numbers	 
+	// A single number or a comma-seperated list of numbers
 	$message = urlencode($message);
-	$data = "workingkey=".$hash."&message=".$message."&sender=".$sender."&to=".$numbers."&test=".$test;
-	$ch = curl_init('http://tx.techsoltech.com/api/web2multisms.php?');
+	$data = "username=".$username."&hash=".$hash."&message=".$message."&sender=".$sender."&numbers=".$numbers."&test=".$test;
+	$ch = curl_init('http://api.textlocal.in/send/?');
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$result = curl_exec($ch); // This is the result from the API
-	curl_close($ch); 
-        echo $result; 
+	curl_close($ch);
+        
+        
+        echo $result;
     }
     
 
