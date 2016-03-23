@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <form action="" method="post">
+            <input name="storeid" placeholder='store_id' type="text" /> 
+            <input name="submit" type="submit" />  
+        </form>
+        <?php
+        $string = '4~4~332.00~10.00~300401~10~<br>French / Russian / Spanish / Portuguese Keyboards Upgrade Available~2016-01-26 '
+                . '16:14:09~SERB-JA-15-AC197NIA,4~1~3335.00~10.00~3000001~10~<br>French / Russian / Spanish / Portuguese Keyboards Upgrade '
+                . 'Available~2016-01-26 16:17:01~ATE-JA-15-AC197NIA,4~3~235.00~10.00~3000005~10~<br>French / Russian / Spanish / '
+                . 'Portuguese Keyboards Upgrade Available~2016-01-26 16:14:09~BB-JA-15-AC197NIA,4~1~402.50~10.00~3000001~25~Minimum '
+                . 'Ordering Quantity of 25+ Units~2016-01-29 20:46~TOE-SDGD-YHGG,4~3~332.00~10.00~3088801~0~<br>'
+                . 'French / Russian / Spanish / Portuguese Keyboards Upgrade Available~2016-01-26 '
+                . '16:14:09~SERB-JA-15-ACGGNIA,';
+
+        $stringo = '4~4~332.00~10.00~300401~0~<br>French / Russian / Spanish / Portuguese Keyboards Upgrade Available~2016-01-26 '
+                . '16:14:09~SERB-JA-15-AC197NIA,4~1~3335.00~10.00~3000001~0~<br>French / Russian / Spanish / Portuguese Keyboards Upgrade '
+                . 'Available~2016-01-26 16:17:01~ATE-JA-15-AC197NIA,4~3~235.00~10.00~3000005~0~<br>French / Russian / Spanish / '
+                . 'Portuguese Keyboards Upgrade Available~2016-01-26 16:14:09~BB-JA-15-AC197NIA,4~1~402.50~10.00~3000001~0~Minimum '
+                . 'Ordering Quantity of 25+ Units~2016-01-29 20:46~TOE-SDGD-YHGG,4~3~332.00~10.00~3088801~0~<br>'
+                . 'French / Russian / Spanish / Portuguese Keyboards Upgrade Available~2016-01-26 '
+                . '16:14:09~SERB-JA-15-ACGGNIA,';
+        $result = explode(',', $string);
+        foreach ($result as $key) {
+            $store[] = explode('~', $key);
+        }
+        foreach ($store as $key) {
+            $myarray[] = array(
+                'status' => $key[0],
+                'storeid' => $key[1],
+                'price' => $key[2],
+                'margin' => $key[3],
+                'supplierid' => $key[4],
+                'quantity' => $key[5],
+                'criteria' => $key[6],
+                'lastmodified' => $key[7],
+                'sku' => $key[8]
+            );
+        }
+
+
+
+
+
+        #get keys all store ids
+        $storeid = array_column($myarray, 'storeid');
+
+
+        if (isset($_POST['submit'])) {
+            $storeidreq = $_POST['storeid'];
+        }
+
+
+        if ($storeidreq != '') {
+            #get keys rows with requested store id 
+            $ids = array_keys($storeid, $storeidreq);
+            #make it as an array
+            foreach ($ids as $id) {
+                $array[] = $myarray[$id];
+            }
+        } else {
+
+            $array = $myarray;
+        }
+        display($array);
+        #get all quantities 
+        $quantity = array_column($array, 'quantity');
+        $qMax = max($quantity);
+        #quantities greater than 0
+        $Quantity = array_filter($array, function($key) {
+            $filter = $key['quantity'] > 0;
+            return $filter;
+            });
+        if ($qMax < 1) {
+            echo '<br><center <div style="background-color:red;"    >Check Availability</div></center>';
+            $AvailableQuantity = $array;
+        } else {
+            $AvailableQuantity = $Quantity;
+        }
+        //  display($AvailableQuantity);
+        #for all stores
+        $filtered = array();
+        foreach ($AvailableQuantity as $prices) {
+            if (FALSE === isset($filtered[$prices['storeid']]) || $filtered[$prices['storeid']]['price'] > $prices['price']) {
+                $filtered[$prices['storeid']] = $prices;
+            }
+        }
+        $filtered = array_values($filtered);
+
+
+        #min price        
+        #prevent empty value
+        $priceAfilter = array_filter($AvailableQuantity, function($key) {
+            $filter = $key['price'] != '';
+            return $filter;
+        });
+        $priceA = array_column($priceAfilter, 'price');
+        $priceMin = min($priceA);
+        $prIds = array_keys($priceA, $priceMin);
+        foreach ($prIds as $id) {
+            $minpricea[] = $array[$id];
+        }
+
+        if ($storeidreq != '') {
+            displayresult($minpricea);
+        } else {
+            displayresult($filtered);
+            
+           // displayresult($minpricea);
+        }
+        
+        function displayresult($resdis) {
+            for ($i = 0; $i < count($resdis); $i++) {
+                echo'<center><br>';
+                echo'<table border>';
+                echo('<tr>');
+                echo('<td>store id</td>');
+                echo('<td>priceA</td>');
+                echo('<td>products_quantity</td>');
+
+                echo('</tr>');
+                for ($i = 0; $i < count($resdis); $i++) {
+                    if ($resdis[$i]['supplierid'] == 3000001) {
+                        $colour = "#CCCC99";  
+                        $price = $resdis[$i]['price'] ;
+                    } else {
+                        $colour = "WHITE";  
+                        $price = $resdis[$i]['price']; //TODO calculate price using this 
+                    }
+
+
+                    echo('<tr BGCOLOR="' . $colour . '">');
+                    echo('<td>' . $resdis[$i]['storeid'] . '</td>');
+                    echo('<td>' . $price . '</td>');
+                    echo('<td>' . $resdis[$i]['quantity'] . '</td>');
+                    echo('</tr>');
+                }echo'</table></center>';
+            }
+        }
+
+        function display($resdis) {
+            echo'<br>';
+            echo'<table border=1>';
+            echo('<tr>');
+            echo('<td>store id</td>');
+            echo('<td>product status</td>');
+            echo('<td>priceA</td>');
+            echo('<td>marginp</td>');
+            echo('<td>supplier_id</td>');
+            echo('<td>products_quantity</td>');
+            echo('<td>products_criteria</td>');
+            echo('<td>products_last_modified</td>');
+            echo('<td>supplier_sku</td>');
+
+            echo('</tr>');
+            for ($i = 0; $i < count($resdis); $i++) {
+                echo('<tr>');
+                echo('<td>' . $resdis[$i]['storeid'] . '</td>');
+                echo('<td>' . $resdis[$i]['status'] . '</td>');
+                echo('<td>' . $resdis[$i]['price'] . '</td>');
+                echo('<td>' . $resdis[$i]['margin'] . '</td>');
+                echo('<td>' . $resdis[$i]['supplierid'] . '</td>');
+                echo('<td>' . $resdis[$i]['quantity'] . '</td>');
+                echo('<td>' . $resdis[$i]['criteria'] . '</td>');
+                echo('<td>' . $resdis[$i]['lastmodified'] . '</td>');
+                echo('<td>' . $resdis[$i]['sku'] . '</td>');
+                echo('</tr>');
+            }echo'</table>';
+        }
+        ?>
+
+
+
+    </body>
+</html>
