@@ -1,0 +1,14 @@
+   
+   
+   
+   #image encription
+   #suitable for small images icons etc
+   
+   private function encryptAll($imageFullUrl) {
+        $src = str_replace(' ', '%20', $imageFullUrl);
+        $path = $src;
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        return $base64;
+    }
