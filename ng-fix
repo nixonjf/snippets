@@ -1,3 +1,5 @@
+             #append data to div
+             
              angular.forEach(response.products, function (value, key) {
                        // console.log(key + ': ' + value.id + ': ' + key % 2);
 
@@ -20,3 +22,26 @@
                             var myEl = angular.element(document.querySelector('#ffss2'));
                             myEl.append(clockwork);
                         }
+
+
+
+
+
+#stitch data into ng element
+
+            $scope.products = [
+            ];
+            $scope.loadMore = function () {
+                var page = 2;
+                $scope.apage = $scope.cpage || -2;
+                Productload.getPro($scope.cat, page, $scope.dip, '', $scope.data.skey, ($scope.apage * 1) + 2).success(function (response) {
+                    $scope.productsa = response.products;
+
+                    angular.forEach(response.products, function (value, key) {
+                        $scope.products.push({price: value.price, id: value.id, sub_category: value.sub_category,
+                            sub_categoryname: value.sub_categoryname, main_category: value.main_category, last_category: value.last_category, categoryname_ml: value.categoryname_ml, image: value.image
+                            , description_en: value.description_en, brand: value.brand, MRP: value.MRP, unit: value.unit})
+                    });
+
+
+
