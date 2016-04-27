@@ -1,0 +1,22 @@
+             angular.forEach(response.products, function (value, key) {
+                       // console.log(key + ': ' + value.id + ': ' + key % 2);
+
+
+ var divTemplate = "         <div  ><center><img style=\"width: 40px; height:50px;\" src=" + response.products[key].image + "> </center>  </div> \n\
+  <div class=\"card-content\">\n\
+                      <div style=\"height: 50px;\">    <center>  <h4 class=\"card-title\">" + response.products[key].description_en + "</h4>\n\
+<h4 class=\"card-title\">" + response.products[key].description_ml + "</h4></center></div><center><div><p>" +
+                                    response.products[key].unit + "</p> </div> <br> <div><p class=\"card-function\">  <b> INR" + response.products[key].price +
+                                    "</b> </p></div><button id=\"addtocart" + response.products[key].id + "\" class=\"btn btn-success\" ng-click=\"addtocart(" + response.products[key].id + ")\">Add</button>" +
+                                    "</center></div> ";
+                            #compile using angular
+                            var clockwork = $compile(divTemplate)($scope);
+                        if (key % 2 == 0) {me
+                            var myEl = angular.element(document.querySelector('#ffss')); 
+                            myEl.append(clockwork);
+                        }
+
+                        if (key % 2 == 1) {
+                            var myEl = angular.element(document.querySelector('#ffss2'));
+                            myEl.append(clockwork);
+                        }
