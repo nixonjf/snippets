@@ -45,3 +45,20 @@
 
 
 
+
+#Enter exit,view,
+$scope.$on("$ionicView.beforeEnter", function(event, data){
+   // handle event
+   console.log("State Params: ", data.stateParams);
+});
+
+$scope.$on("$ionicView.enter", function(event, data){
+   // handle event
+   console.log("State Params: ", data.stateParams);
+});
+
+$scope.$on("$ionicView.afterEnter", function(event, data){
+   // handle event
+   console.log("State Params: ", data.stateParams);
+});
+
